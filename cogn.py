@@ -31,7 +31,7 @@ def sender(address, noisy_mode):
                         # print("elapsed:", time.perf_counter() - next_send)
                         if noisy_mode and next_send >= next_drop:
                             next_drop = next_send + np.random.default_rng().uniform(2, 3)
-                            print("\t****  noise  ****")
+                            print("\t****  noise  ****", flush=True)
                         else:
                             vec = np.random.default_rng().normal(size=50)
                             conn.send(vec)
@@ -67,9 +67,9 @@ def receiver(address, noisy_mode, series_size):
                     rate = recv_time - prev_recv_time
                 
                 if noisy_mode and rate > 1.8 * expected_rate and len(vectors) > 10:
-                    print(f'\nWARNING: packet dropped (waited {rate - expected_rate}s). ', end='')
+                    print(f'\nWARNING: packet dropped (waited {rate - expected_rate}s). ', end='', flush=True)
                     if drops:
-                        print(f'{recv_time - prev_drop_time}s since last drop.')
+                        print(f'{recv_time - prev_drop_time}s since last drop.', flush=True)
                     print()
 
                     drops += 1
@@ -85,7 +85,7 @@ def receiver(address, noisy_mode, series_size):
 
                 prev_recv_time = recv_time
 
-                print(f'rate:{rate}', end = "\r")
+                print(f'rate:{rate}', end = "\r", flush=True)
 
         except KeyboardInterrupt:
             print("received KeyboardInterrupt")
